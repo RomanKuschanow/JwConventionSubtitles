@@ -7,4 +7,12 @@
     <RootNamespace>JwConventionSubtitles</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\..\..\Desktop\IsExternalInit.cs" Link="IsExternalInit.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
+  </ItemGroup>
+
 </Project>

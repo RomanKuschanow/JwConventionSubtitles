@@ -6,20 +6,13 @@ namespace JwConventionSubtitles;
 
 public class VttParser
 {
-    public List<VttFrame> Frames { get; private set; }
-
-    public VttParser()
+    public IEnumerable<VttFrame> Parse(IEnumerable<string> lines)
     {
-    }
+        IEnumerable<VttFrame> frames = new List<VttFrame>();
 
-    public StreamReader LoadSubtitles(string path)
-    {
         Regex regex = new Regex(@"\d{2}:\d{2}:\d{2}\.\d{3}");
-        StreamReader sr = new StreamReader(path);
-        string? line;
 
-
-        while ((line = sr.ReadLine()) != null)
+        foreach (var line in lines)
         {
             MatchCollection matches = regex.Matches(line);
 
@@ -31,6 +24,6 @@ public class VttParser
             continue;
         }
 
-        return sr;
+        return frames;
     }
 }
