@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace JwConventionSubtitles
@@ -8,11 +9,17 @@ namespace JwConventionSubtitles
     {
         public IEnumerable<string> ReadLines(string path)
         {
-            List<string> strings = new List<string>();
+            List<string> lines = new List<string>();
 
+            using StreamReader reader = new StreamReader(path);
 
+            string? line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                lines.Add(line);
+            }
 
-            return strings;
+            return lines;
         }
 
         public string ReadText(string path)

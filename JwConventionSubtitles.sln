@@ -9,12 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwConventionSubtitles.Tests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{658BC0BE-A849-466B-ADFE-2D00863E4994}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\Desktop\IsExternalInit.cs = ..\..\..\Desktop\IsExternalInit.cs
+		IsExternalInit.cs = IsExternalInit.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwConventionSubtitles.Console", "JwConventionSubtitles.Console\JwConventionSubtitles.Console.csproj", "{82B26D9F-F82C-4AF6-A299-C7E71E4BBC04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwConventionSubtitles.Console", "JwConventionSubtitles.Console\JwConventionSubtitles.Console.csproj", "{82B26D9F-F82C-4AF6-A299-C7E71E4BBC04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwConventionSubtitles.WPF", "JwConventionSubtitles.WPF\JwConventionSubtitles.WPF.csproj", "{6269CE7B-F657-461F-8D1E-20626B8ADAD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwConventionSubtitles.WPF", "JwConventionSubtitles.WPF\JwConventionSubtitles.WPF.csproj", "{6269CE7B-F657-461F-8D1E-20626B8ADAD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

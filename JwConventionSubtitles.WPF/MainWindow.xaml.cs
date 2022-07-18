@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace JwConventionSubtitles.WPF
+namespace JwConventionSubtitles
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

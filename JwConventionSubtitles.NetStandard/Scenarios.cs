@@ -7,7 +7,7 @@ namespace JwConventionSubtitles
 {
     internal class Scenarios
     {
-        public static async Task Scenario1()
+        /*public static async Task Scenario1()
         {
             var fileReader = new FileReader();
             var parser = new VttParser();
@@ -20,6 +20,6 @@ namespace JwConventionSubtitles
             List<SpeechFromProgram> speechesFromProgram = new ConventionProgramParser(conventionProgramString);
 
             List<SpeechWithText> speeches = speechConverter.Convert(frames, speechesFromProgram);
-        }
+        }*/
     }
 }

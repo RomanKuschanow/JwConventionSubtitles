@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\..\Desktop\IsExternalInit.cs" Link="IsExternalInit.cs" />
+    <Compile Include="..\IsExternalInit.cs" Link="IsExternalInit.cs" />
   </ItemGroup>
 
   <ItemGroup>
