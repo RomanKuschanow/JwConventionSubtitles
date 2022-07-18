@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VTT_Reader;
+namespace JwConventionSubtitles;
 
 public class VttFrame
 {
