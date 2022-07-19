@@ -8,11 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="SpeechFromProgram.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\IsExternalInit.cs" Link="IsExternalInit.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="SpeechFromProgram.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
 </Project>

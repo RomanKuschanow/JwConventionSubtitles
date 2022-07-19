@@ -22,7 +22,7 @@ public class VttParser
             {
                 int j = i;
 
-                while (lines[j] != "\n" && lines[j] != "\r\n")
+                while (lines[j] != "")
                 {
                     j++;
                     if (j >= lines.Count) break;

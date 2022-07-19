@@ -1,6 +1,7 @@
 using JwConventionSubtitles;
 using Moq;
 using FluentAssertions;
+using System;
 
 namespace JwConventionSubtitles.Tests;
 
@@ -88,11 +89,11 @@ public class VttParserTests
         var lines = new[] {
             "00:13:29.371 --> 00:13:31.373 line:90% position:50% align:center",
             "It is my great pleasure",
-            "\n",
+            "",
             "01:37:34.285 --> 01:37:36.788 line:90% position:50% align:center",
             "our continued love for Jehovah,",
             "for our neighbor, and for God’s Word",
-            "\n",
+            "",
             "01:37:41.751 --> 01:37:45.338 line:90% position:50% align:center",
             "will lead to our enjoying everlasting peace"
         };
@@ -117,5 +118,43 @@ public class VttParserTests
         frame3.StartTime.Should().Be(TimeSpan.Parse("01:37:41.751"));
         frame3.EndTime.Should().Be(TimeSpan.Parse("01:37:45.338"));
         frame3.Lines.Should().Equal(new[] { "will lead to our enjoying everlasting peace" });
+    }
+}
+
+public class FileReaderTests
+{
+    [Fact]
+    public void FileReadCorrect()
+    {
+        // Arrange
+        var sut = new FileReader();
+
+        // Act
+        var lines = sut.ReadLines(@"C:\CO-r22_E_01.vtt");
+
+        // Assert
+        lines.Should().NotBeEmpty();
+    }
+}
+
+public class ReadFileAndParseIntegrationTests
+{
+    [Fact]
+    public void ReadFileAndParseCorrect()
+    {
+        // Arrange
+        var reader = new FileReader();
+        var parser = new VttParser();
+
+        // Act
+        var lines = reader.ReadLines(@"C:\CO-r22_E_01.vtt");
+        var frames = parser.Parse(lines.ToList());
+
+        // Assert
+        frames.Should().NotBeEmpty();
+        var frame = frames.First();
+        frame.StartTime.Should().Be(TimeSpan.Parse("00:00:22.251"));
+        frame.EndTime.Should().Be(TimeSpan.Parse("00:00:26.255"));
+        frame.Lines.Should().Equal(new[] { "On behalf of the Governing Body", "and all of those working" });
     }
 }
