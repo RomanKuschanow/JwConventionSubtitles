@@ -191,7 +191,7 @@ public class ConventionProgramParserTests
 
         // Assert
         speeches.Should().NotBeEmpty();
-        speeches.First().Should().Be("Jehovah Is the God Who Gives Peace");
+        speeches.First().Name.Should().Be("Jehovah Is the God Who Gives Peace");
     }
 
     [Fact]
@@ -226,7 +226,9 @@ public class ConventionProgramParserTests
             "",
             "• Love of Neighbor (Matthew 22:39; Romans 13:8 - 10)",
             "",
-            "• Love for God’s Word (Psalm 119:165, 167, 168)"
+            "• Love for God’s Word (Psalm 119:165, 167, 168)",
+            "",
+            "11:05 Song No. 24 and Announcements"
             };
 
         // Act
@@ -234,7 +236,7 @@ public class ConventionProgramParserTests
 
         // Assert
         speeches.ToList().Count.Should().Be(3);
-        speeches.First().Should().Be("Love for God");
+        speeches.First().Name.Should().Be("How Love Leads to Genuine Peace: Love for God");
     }
 
     [Fact]
@@ -255,7 +257,9 @@ public class ConventionProgramParserTests
             "",
             "• Love of Neighbor (Matthew 22:39; Romans 13:8 - 10)",
             "",
-            "• Love for God’s Word (Psalm 119:165, 167, 168)"
+            "• Love for God’s Word (Psalm 119:165, 167, 168)",
+            "",
+            "11:05 Song No. 24 and Announcements"
             };
 
         // Act
@@ -264,10 +268,10 @@ public class ConventionProgramParserTests
         // Assert
         var speechesList = speeches.ToList();
         speechesList.Count.Should().Be(4);
-        speechesList[0].Should().Be("Jehovah Is the God Who Gives Peace");
-        speechesList[1].Should().Be("Love for God");
-        speechesList[2].Should().Be("Love of Neighbor");
-        speechesList[3].Should().Be("Love for God’s Word");
+        speechesList[0].Name.Should().Be("Jehovah Is the God Who Gives Peace");
+        speechesList[1].Name.Should().Be("How Love Leads to Genuine Peace: Love for God");
+        speechesList[2].Name.Should().Be("How Love Leads to Genuine Peace: Love of Neighbor");
+        speechesList[3].Name.Should().Be("How Love Leads to Genuine Peace: Love for God’s Word");
     }
 }
 public class ReadProgrtamAndParseIntegrationTests
@@ -285,9 +289,32 @@ public class ReadProgrtamAndParseIntegrationTests
 
         // Assert
         var speechesList = speeches.ToList();
-        speechesList[0].Should().Be("Jehovah Is the God Who Gives Peace");
-        speechesList[1].Should().Be("Love for God");
-        speechesList[2].Should().Be("Love of Neighbor");
-        speechesList[3].Should().Be("Love for God’s Word");
+        speechesList[0].Name.Should().Be("Jehovah Is the God Who Gives Peace");
+        speechesList[1].Name.Should().Be("How Love Leads to Genuine Peace: Love for God");
+        speechesList[2].Name.Should().Be("How Love Leads to Genuine Peace: Love of Neighbor");
+        speechesList[3].Name.Should().Be("How Love Leads to Genuine Peace: Love for God’s Word");
+    }
+}
+
+public class SpeechConverterIntegrationTests
+{
+    [Fact]
+    public void WhenFramesAndSpeechesFromProgramListNotEmpty_ThenSpeechesWithTextNotEmpty()
+    {
+        //Arrage
+        var reader = new FileReader();
+        var programParser = new ConventionProgramParser();
+        var vttParser = new VttParser();
+        var speechConverter = new SpeechConverter();
+
+        // Act
+        var vttLines = reader.ReadLines(@"C:\CO-r22_E_01.vtt");
+        var programLines = reader.ReadLines(@"C:\Users\Roman\Documents\Projects\JwConventionSubtitles\Program.txt");
+        var frames = vttParser.Parse(vttLines.ToList());
+        var speechesFromProgram = programParser.Parse(programLines.ToList());
+        var speechesWithText = speechConverter.Convert(frames.ToList(), speechesFromProgram.ToList());
+
+        // Assert
+        speechesWithText.Should().NotBeEmpty();
     }
 }

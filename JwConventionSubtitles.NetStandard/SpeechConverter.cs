@@ -7,29 +7,33 @@ namespace JwConventionSubtitles;
 
 public class SpeechConverter
 {
-    public IEnumerable<SpeechWithText> Convert(List<VttFrame> frames, List<string> speeches)
+    public IEnumerable<SpeechWithText> Convert(List<VttFrame> frames, List<SpeechFromProgram> speeches)
     {
         List<SpeechWithText> speechesWithText = new List<SpeechWithText>();
 
         string text = "";
-        string name = "";
+        TimeSpan speechStartTime;
+        SpeechFromProgram currSpeech = new SpeechFromProgram(false, TimeSpan.Zero, TimeSpan.Zero, "");
         bool speechStart = false;
 
         foreach (VttFrame frame in frames)
         {
             foreach (string line in frame.Lines)
             {
-                foreach (string speech in speeches)
+                foreach (var speech in speeches)
                 {
                     var regex = new Regex(@"[A-ZА-ЯІЇЄ’ ]+(?=\:|\.)[\:|\.] |[“”«»]");
 
-                    if (regex.Replace(line, "").Contains(speech))
+                    if (regex.Replace(line, "").Contains(speech.Name) || (speechStart && Math.Round((currSpeech.EndTime - currSpeech.StartTime).TotalMinutes) == Math.Round((frame.StartTime - speechStartTime).TotalMinutes)))
                     {
-                        name = speech;
+                        currSpeech = speech;
+                        speechStartTime = frame.StartTime;
                         text = "";
                         if (speechStart)
                         {
-                            speechesWithText.Add(new SpeechWithText(name, text));
+                            speechesWithText.Add(new SpeechWithText(currSpeech.Name, text));
+                            speechStart = false;
+                            break;
                         }
                         speechStart = true;
                         break;
