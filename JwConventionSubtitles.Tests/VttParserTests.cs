@@ -234,7 +234,7 @@ public class ConventionProgramParserTests
 
         // Assert
         speeches.ToList().Count.Should().Be(3);
-        speeches.First().Should().Be("How Love Leads to Genuine Peace: Love for God");
+        speeches.First().Should().Be("Love for God");
     }
 
     [Fact]
@@ -265,9 +265,9 @@ public class ConventionProgramParserTests
         var speechesList = speeches.ToList();
         speechesList.Count.Should().Be(4);
         speechesList[0].Should().Be("Jehovah Is the God Who Gives Peace");
-        speechesList[1].Should().Be("How Love Leads to Genuine Peace: Love for God");
-        speechesList[2].Should().Be("How Love Leads to Genuine Peace: Love of Neighbor");
-        speechesList[3].Should().Be("How Love Leads to Genuine Peace: Love for God’s Word");
+        speechesList[1].Should().Be("Love for God");
+        speechesList[2].Should().Be("Love of Neighbor");
+        speechesList[3].Should().Be("Love for God’s Word");
     }
 }
 public class ReadProgrtamAndParseIntegrationTests
@@ -286,8 +286,8 @@ public class ReadProgrtamAndParseIntegrationTests
         // Assert
         var speechesList = speeches.ToList();
         speechesList[0].Should().Be("Jehovah Is the God Who Gives Peace");
-        speechesList[1].Should().Be("How Love Leads to Genuine Peace: Love for God");
-        speechesList[2].Should().Be("How Love Leads to Genuine Peace: Love of Neighbor");
-        speechesList[3].Should().Be("How Love Leads to Genuine Peace: Love for God’s Word");
+        speechesList[1].Should().Be("Love for God");
+        speechesList[2].Should().Be("Love of Neighbor");
+        speechesList[3].Should().Be("Love for God’s Word");
     }
 }
