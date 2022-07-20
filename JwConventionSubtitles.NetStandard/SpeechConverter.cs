@@ -15,23 +15,31 @@ public class SpeechConverter
         TimeSpan speechStartTime;
         SpeechFromProgram currSpeech = new SpeechFromProgram(false, TimeSpan.Zero, TimeSpan.Zero, "");
         bool speechStart = false;
+        bool speechStop = false;
 
-        foreach (VttFrame frame in frames)
+        var regex = new Regex(@"[A-ZА-ЯІЇЄ’ ]+(?=\:|\.)[\:|\.] |[‘’“”«».]");
+
+        int currFrame = 0;
+
+        for (int s = 0; s < speeches.Count; s++)
         {
-            foreach (string line in frame.Lines)
+            for (int i = currFrame; i < frames.Count; i++)
             {
-                foreach (var speech in speeches)
+                speechStop = false;
+                foreach (string line in frames[i].Lines)
                 {
-                    var regex = new Regex(@"[A-ZА-ЯІЇЄ’ ]+(?=\:|\.)[\:|\.] |[“”«»]");
+                    if (line == "—Love for God’s Word.”")
+                        s = s;
 
-                    if (regex.Replace(line, "").Contains(speech.Name) || (speechStart && Math.Round((currSpeech.EndTime - currSpeech.StartTime).TotalMinutes) == Math.Round((frame.StartTime - speechStartTime).TotalMinutes)))
+                    if ((regex.Replace(line, "").Contains(regex.Replace(speeches[s].Name, "")) && !speechStart) || (s + 1 < speeches.Count && (regex.Replace(line, "").Contains(regex.Replace(speeches[s + 1].Name, "")) && speechStart)) || i + 1 == frames.Count)
                     {
-                        currSpeech = speech;
-                        speechStartTime = frame.StartTime;
-                        text = "";
+                        currSpeech = speeches[s];
+                        speechStartTime = frames[i].StartTime;
                         if (speechStart)
                         {
                             speechesWithText.Add(new SpeechWithText(currSpeech.Name, text));
+                            text = "";
+                            speechStop = true;
                             speechStart = false;
                             break;
                         }
@@ -43,7 +51,14 @@ public class SpeechConverter
                         text += " " + line;
                     }
                 }
+                if (speechStop)
+                {
+                    currFrame = i;
+                    break;
+                }
             }
+            if (currFrame + 1 == frames.Count)
+                break;
         }
 
         return speechesWithText;

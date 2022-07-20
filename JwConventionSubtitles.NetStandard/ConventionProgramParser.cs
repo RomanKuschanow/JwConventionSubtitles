@@ -94,7 +94,7 @@ public class ConventionProgramParser
                 {
                     endTime = symposiumStartTime.Add(TimeSpan.FromMinutes((symposiumEndTime - symposiumStartTime).TotalMinutes / symposiumSpeechesCount * (currSymposiumSpeech)));
                 }
-                speeches.Add(new SpeechFromProgram(true, symposiumStartTime.Add(startTime), endTime, $"{currSymposiumName}: {symposiumSpeechMatches[0].Groups[2].Value}"));
+                speeches.Add(new SpeechFromProgram(true, symposiumStartTime.Add(startTime), endTime, $"{symposiumSpeechMatches[0].Groups[2].Value}"));
             }
         }
 

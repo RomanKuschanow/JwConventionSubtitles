@@ -211,7 +211,7 @@ public class ConventionProgramParserTests
         var speeches = sut.Parse(lines.ToList());
 
         // Assert
-        speeches.ToList().Count.Should().Be(1);
+        speeches.Count().Should().Be(1);
     }
 
     [Fact]
@@ -235,7 +235,7 @@ public class ConventionProgramParserTests
         var speeches = sut.Parse(lines.ToList());
 
         // Assert
-        speeches.ToList().Count.Should().Be(3);
+        speeches.Count().Should().Be(3);
         speeches.First().Name.Should().Be("How Love Leads to Genuine Peace: Love for God");
     }
 
@@ -296,7 +296,7 @@ public class ReadProgrtamAndParseIntegrationTests
     }
 }
 
-public class SpeechConverterIntegrationTests
+public class SpeechConverterTests
 {
     [Fact]
     public void WhenFramesAndSpeechesFromProgramListNotEmpty_ThenSpeechesWithTextNotEmpty()
@@ -316,5 +316,25 @@ public class SpeechConverterIntegrationTests
 
         // Assert
         speechesWithText.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void WhenFramesAndSpeechesFromProgramListHas4Speeches_ThenSpeechesWithTextHas4Speeches()
+    {
+        //Arrage
+        var reader = new FileReader();
+        var programParser = new ConventionProgramParser();
+        var vttParser = new VttParser();
+        var speechConverter = new SpeechConverter();
+
+        // Act
+        var vttLines = reader.ReadLines(@"C:\CO-r22_E_01.vtt");
+        var programLines = reader.ReadLines(@"C:\Users\Roman\Documents\Projects\JwConventionSubtitles\Program.txt");
+        var frames = vttParser.Parse(vttLines.ToList());
+        var speechesFromProgram = programParser.Parse(programLines.ToList());
+        var speechesWithText = speechConverter.Convert(frames.ToList(), speechesFromProgram.ToList());
+
+        // Assert
+        speechesWithText.Count().Should().Be(4);
     }
 }

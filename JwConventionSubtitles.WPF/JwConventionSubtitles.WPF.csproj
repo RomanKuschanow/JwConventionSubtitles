@@ -8,4 +8,8 @@
     <RootNamespace>JwConventionSubtitles</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\JwConventionSubtitles.NetStandard\JwConventionSubtitles.NetStandard.csproj" />
+  </ItemGroup>
+
 </Project>
