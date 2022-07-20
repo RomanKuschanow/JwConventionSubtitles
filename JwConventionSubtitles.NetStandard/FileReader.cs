@@ -21,10 +21,5 @@ namespace JwConventionSubtitles
 
             return lines;
         }
-
-        public string ReadText(string path)
-        {
-            return "";
-        }
     }
 }

@@ -1,4 +1,4 @@
-using JwConventionSubtitles;
+﻿using JwConventionSubtitles;
 using Moq;
 using FluentAssertions;
 using System;
@@ -12,7 +12,7 @@ public class VttParserTests
     {
         // Arrange
         var sut = new VttParser();
-        var lines = new[] { 
+        var lines = new[] {
             ""
         };
 
@@ -92,7 +92,7 @@ public class VttParserTests
             "",
             "01:37:34.285 --> 01:37:36.788 line:90% position:50% align:center",
             "our continued love for Jehovah,",
-            "for our neighbor, and for God�s Word",
+            "for our neighbor, and for God’s Word",
             "",
             "01:37:41.751 --> 01:37:45.338 line:90% position:50% align:center",
             "will lead to our enjoying everlasting peace"
@@ -112,7 +112,7 @@ public class VttParserTests
         var frame2 = framesList[1];
         frame2.StartTime.Should().Be(TimeSpan.Parse("01:37:34.285"));
         frame2.EndTime.Should().Be(TimeSpan.Parse("01:37:36.788"));
-        frame2.Lines.Should().Equal(new[] { "our continued love for Jehovah,", "for our neighbor, and for God�s Word" });
+        frame2.Lines.Should().Equal(new[] { "our continued love for Jehovah,", "for our neighbor, and for God’s Word" });
 
         var frame3 = framesList[2];
         frame3.StartTime.Should().Be(TimeSpan.Parse("01:37:41.751"));
@@ -156,5 +156,138 @@ public class ReadFileAndParseIntegrationTests
         frame.StartTime.Should().Be(TimeSpan.Parse("00:00:22.251"));
         frame.EndTime.Should().Be(TimeSpan.Parse("00:00:26.255"));
         frame.Lines.Should().Equal(new[] { "On behalf of the Governing Body", "and all of those working" });
+    }
+}
+
+public class ConventionProgramParserTests
+{
+    [Fact]
+    public void WhenLinesEmpty_ThenSpeechesEmpty()
+    {
+        // Arrange
+        var sut = new ConventionProgramParser();
+        var lines = new[] {
+            ""
+        };
+
+        // Act
+        var speeches = sut.Parse(lines.ToList());
+
+        // Assert
+        speeches.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void WhenLinesHas1Speech_ThenSpeechesListHas1Speech()
+    {
+        // Arrange
+        var sut = new ConventionProgramParser();
+        var lines = new[] {
+            "9:40 CHAIRMAN’S ADDRESS: Jehovah Is “the God Who Gives Peace” (Romans 15:33; Philippians 4:6, 7)"
+        };
+
+        // Act
+        var speeches = sut.Parse(lines.ToList());
+
+        // Assert
+        speeches.Should().NotBeEmpty();
+        speeches.First().Should().Be("Jehovah Is the God Who Gives Peace");
+    }
+
+    [Fact]
+    public void WhenLinesHas1SpeechAndSomeOtherLines_ThenSpeechesListHas1Speech()
+    {
+        // Arrange
+        var sut = new ConventionProgramParser();
+        var lines = new[] {
+            "9:20 Music-Video Presentation",
+            "",
+            "9:30 Song No. 86 and Prayer",
+            "",
+            "9:40 CHAIRMAN’S ADDRESS: Jehovah Is “the God Who Gives Peace” (Romans 15:33; Philippians 4:6, 7)"
+        };
+
+        // Act
+        var speeches = sut.Parse(lines.ToList());
+
+        // Assert
+        speeches.ToList().Count.Should().Be(1);
+    }
+
+    [Fact]
+    public void WhenLinesHasSymposium_ThenSpeechesListHasAllSymposiumSpeeches()
+    {
+        // Arrange
+        var sut = new ConventionProgramParser();
+        var lines = new[] {
+            "10:10 SYMPOSIUM: How Love Leads to Genuine Peace",
+            "",
+            "• Love for God (Matthew 22:37, 38; Romans 12:17 - 19)",
+            "",
+            "• Love of Neighbor (Matthew 22:39; Romans 13:8 - 10)",
+            "",
+            "• Love for God’s Word (Psalm 119:165, 167, 168)"
+            };
+
+        // Act
+        var speeches = sut.Parse(lines.ToList());
+
+        // Assert
+        speeches.ToList().Count.Should().Be(3);
+        speeches.First().Should().Be("How Love Leads to Genuine Peace: Love for God");
+    }
+
+    [Fact]
+    public void WhenLinesHasSpeechAndSymposium_ThenSpeechesListHasAllSpeeches()
+    {
+        // Arrange
+        var sut = new ConventionProgramParser();
+        var lines = new[] {
+            "9:20 Music-Video Presentation",
+            "",
+            "9:30 Song No. 86 and Prayer",
+            "",
+            "9:40 CHAIRMAN’S ADDRESS: Jehovah Is “the God Who Gives Peace” (Romans 15:33; Philippians 4:6, 7)",
+            "",
+            "10:10 SYMPOSIUM: How Love Leads to Genuine Peace",
+            "",
+            "• Love for God (Matthew 22:37, 38; Romans 12:17 - 19)",
+            "",
+            "• Love of Neighbor (Matthew 22:39; Romans 13:8 - 10)",
+            "",
+            "• Love for God’s Word (Psalm 119:165, 167, 168)"
+            };
+
+        // Act
+        var speeches = sut.Parse(lines.ToList());
+
+        // Assert
+        var speechesList = speeches.ToList();
+        speechesList.Count.Should().Be(4);
+        speechesList[0].Should().Be("Jehovah Is the God Who Gives Peace");
+        speechesList[1].Should().Be("How Love Leads to Genuine Peace: Love for God");
+        speechesList[2].Should().Be("How Love Leads to Genuine Peace: Love of Neighbor");
+        speechesList[3].Should().Be("How Love Leads to Genuine Peace: Love for God’s Word");
+    }
+}
+public class ReadProgrtamAndParseIntegrationTests
+{
+    [Fact]
+    public void ReadFileAndParseCorrect()
+    {
+        // Arrange
+        var reader = new FileReader();
+        var parser = new ConventionProgramParser();
+
+        // Act
+        var lines = reader.ReadLines(@"C:\Users\Roman\Documents\Projects\JwConventionSubtitles\Program.txt");
+        var speeches = parser.Parse(lines.ToList());
+
+        // Assert
+        var speechesList = speeches.ToList();
+        speechesList[0].Should().Be("Jehovah Is the God Who Gives Peace");
+        speechesList[1].Should().Be("How Love Leads to Genuine Peace: Love for God");
+        speechesList[2].Should().Be("How Love Leads to Genuine Peace: Love of Neighbor");
+        speechesList[3].Should().Be("How Love Leads to Genuine Peace: Love for God’s Word");
     }
 }
