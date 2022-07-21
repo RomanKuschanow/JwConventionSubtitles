@@ -124,13 +124,13 @@ public class VttParserTests
 public class FileReaderTests
 {
     [Fact]
-    public void FileReadCorrect()
+    public async void FileReadCorrect()
     {
         // Arrange
         var sut = new FileReader();
 
         // Act
-        var lines = sut.ReadLines(@"C:\CO-r22_E_01.vtt");
+        var lines = await sut.ReadLines(@"C:\CO-r22_E_01.vtt");
 
         // Assert
         lines.Should().NotBeEmpty();
@@ -140,14 +140,14 @@ public class FileReaderTests
 public class ReadFileAndParseIntegrationTests
 {
     [Fact]
-    public void ReadFileAndParseCorrect()
+    public async void ReadFileAndParseCorrect()
     {
         // Arrange
         var reader = new FileReader();
         var parser = new VttParser();
 
         // Act
-        var lines = reader.ReadLines(@"C:\CO-r22_E_01.vtt");
+        var lines = await reader.ReadLines(@"C:\CO-r22_E_01.vtt");
         var frames = parser.Parse(lines.ToList());
 
         // Assert
@@ -236,7 +236,7 @@ public class ConventionProgramParserTests
 
         // Assert
         speeches.Count().Should().Be(3);
-        speeches.First().Name.Should().Be("How Love Leads to Genuine Peace: Love for God");
+        speeches.First().Name.Should().Be("Love for God");
     }
 
     [Fact]
@@ -269,37 +269,37 @@ public class ConventionProgramParserTests
         var speechesList = speeches.ToList();
         speechesList.Count.Should().Be(4);
         speechesList[0].Name.Should().Be("Jehovah Is the God Who Gives Peace");
-        speechesList[1].Name.Should().Be("How Love Leads to Genuine Peace: Love for God");
-        speechesList[2].Name.Should().Be("How Love Leads to Genuine Peace: Love of Neighbor");
-        speechesList[3].Name.Should().Be("How Love Leads to Genuine Peace: Love for God’s Word");
+        speechesList[1].Name.Should().Be("Love for God");
+        speechesList[2].Name.Should().Be("Love of Neighbor");
+        speechesList[3].Name.Should().Be("Love for God’s Word");
     }
 }
 public class ReadProgrtamAndParseIntegrationTests
 {
     [Fact]
-    public void ReadFileAndParseCorrect()
+    public async void ReadFileAndParseCorrect()
     {
         // Arrange
         var reader = new FileReader();
         var parser = new ConventionProgramParser();
 
         // Act
-        var lines = reader.ReadLines(@"C:\Users\Roman\Documents\Projects\JwConventionSubtitles\Program.txt");
+        var lines = await reader.ReadLines(@"C:\Users\Roman\Documents\Projects\JwConventionSubtitles\Program.txt");
         var speeches = parser.Parse(lines.ToList());
 
         // Assert
         var speechesList = speeches.ToList();
         speechesList[0].Name.Should().Be("Jehovah Is the God Who Gives Peace");
-        speechesList[1].Name.Should().Be("How Love Leads to Genuine Peace: Love for God");
-        speechesList[2].Name.Should().Be("How Love Leads to Genuine Peace: Love of Neighbor");
-        speechesList[3].Name.Should().Be("How Love Leads to Genuine Peace: Love for God’s Word");
+        speechesList[1].Name.Should().Be("Love for God");
+        speechesList[2].Name.Should().Be("Love of Neighbor");
+        speechesList[3].Name.Should().Be("Love for God’s Word");
     }
 }
 
 public class SpeechConverterTests
 {
     [Fact]
-    public void WhenFramesAndSpeechesFromProgramListNotEmpty_ThenSpeechesWithTextNotEmpty()
+    public async void WhenFramesAndSpeechesFromProgramListNotEmpty_ThenSpeechesWithTextNotEmpty()
     {
         //Arrage
         var reader = new FileReader();
@@ -308,8 +308,8 @@ public class SpeechConverterTests
         var speechConverter = new SpeechConverter();
 
         // Act
-        var vttLines = reader.ReadLines(@"C:\CO-r22_E_01.vtt");
-        var programLines = reader.ReadLines(@"C:\Users\Roman\Documents\Projects\JwConventionSubtitles\Program.txt");
+        var vttLines = await reader.ReadLines(@"C:\CO-r22_E_01.vtt");
+        var programLines = await reader.ReadLines(@"C:\Users\Roman\Documents\Projects\JwConventionSubtitles\Program.txt");
         var frames = vttParser.Parse(vttLines.ToList());
         var speechesFromProgram = programParser.Parse(programLines.ToList());
         var speechesWithText = speechConverter.Convert(frames.ToList(), speechesFromProgram.ToList());
@@ -319,7 +319,7 @@ public class SpeechConverterTests
     }
 
     [Fact]
-    public void WhenFramesAndSpeechesFromProgramListHas4Speeches_ThenSpeechesWithTextHas4Speeches()
+    public async void WhenFramesAndSpeechesFromProgramListHas4Speeches_ThenSpeechesWithTextHas4Speeches()
     {
         //Arrage
         var reader = new FileReader();
@@ -328,13 +328,31 @@ public class SpeechConverterTests
         var speechConverter = new SpeechConverter();
 
         // Act
-        var vttLines = reader.ReadLines(@"C:\CO-r22_E_01.vtt");
-        var programLines = reader.ReadLines(@"C:\Users\Roman\Documents\Projects\JwConventionSubtitles\Program.txt");
+        var vttLines = await reader.ReadLines(@"C:\CO-r22_E_01.vtt");
+        var programLines = await reader.ReadLines(@"C:\Users\Roman\Documents\Projects\JwConventionSubtitles\Program.txt");
         var frames = vttParser.Parse(vttLines.ToList());
         var speechesFromProgram = programParser.Parse(programLines.ToList());
         var speechesWithText = speechConverter.Convert(frames.ToList(), speechesFromProgram.ToList());
 
         // Assert
         speechesWithText.Count().Should().Be(4);
+    }
+}
+
+public class WebFileReaderTests
+{
+    [Fact]
+
+    public async void WhenURLNotEmpty_ThenReturnedStringNotEmpty()
+    {
+        //Arrage
+        var sut = new WebFileReader();
+
+
+        // Act
+        var text = await sut.ReadLines("https://d34ji3l0qn3w2t.cloudfront.net/f5ac4efa-4431-4355-94ea-9b75021f08b7/1/CO-r22_K_02.vtt");
+
+        // Assert
+        text.Should().NotBeEmpty();
     }
 }

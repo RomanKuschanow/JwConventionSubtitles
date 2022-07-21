@@ -20,9 +20,9 @@ public class VttParser
 
             if (matches.Count > 0)
             {
-                int j = i;
+                int j = i + 1;
 
-                while (lines[j] != "")
+                while (lines[j] != "" && !regex.IsMatch(lines[j]))
                 {
                     j++;
                     if (j >= lines.Count) break;

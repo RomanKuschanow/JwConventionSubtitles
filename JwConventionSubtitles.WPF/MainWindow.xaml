@@ -5,9 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JwConventionSubtitles"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="350" Width="300" Name="window">
     <Grid>
-        <DataGrid x:Name="DataGrid1">
-        </DataGrid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBox Margin="4" Width="100" TextChanged="Get_URL"/>
+            <Button Margin="4" Click="SelectProgram_Click">Select Program File</Button>
+            <Button x:Name="convert" Margin="4" IsEnabled="False" Click="Convert_Click">Convert</Button>
+        </StackPanel>
+
+        <StackPanel x:Name="panel" Grid.Row="1">
+            <ItemsControl x:Name="itemControl" ItemsSource="{Binding Path=SpeechButtons}">
+                
+            </ItemsControl>
+        </StackPanel>
     </Grid>
 </Window>

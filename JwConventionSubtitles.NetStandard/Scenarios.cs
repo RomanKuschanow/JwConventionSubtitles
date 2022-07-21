@@ -17,10 +17,10 @@ namespace JwConventionSubtitles
             var speechConverter = new SpeechConverter();
 
             var lines = fileReader.ReadLines(filePath);
-            var frames = parser.Parse(lines.ToList());
+            var frames = parser.Parse(lines.Result.ToList());
 
             var conventionPrograms = fileReader.ReadLines(programPath);
-            var speechesFromProgram = programParser.Parse(conventionPrograms.ToList());
+            var speechesFromProgram = programParser.Parse(conventionPrograms.Result.ToList());
 
             //var speeches = speechConverter.Convert(frames, speechesFromProgram);
         }

@@ -18,6 +18,7 @@ public class SpeechConverter
         bool speechStop = false;
 
         var regex = new Regex(@"[A-ZА-ЯІЇЄ’ ]+(?=\:|\.)[\:|\.] |[‘’“”«».]");
+        var tegregex = new Regex(@"<.>|<\/.>");
 
         int currFrame = 0;
 
@@ -26,30 +27,24 @@ public class SpeechConverter
             for (int i = currFrame; i < frames.Count; i++)
             {
                 speechStop = false;
-                foreach (string line in frames[i].Lines)
-                {
-                    if (line == "—Love for God’s Word.”")
-                        s = s;
+                string lines = String.Join(" ", frames[i].Lines);
 
-                    if ((regex.Replace(line, "").Contains(regex.Replace(speeches[s].Name, "")) && !speechStart) || (s + 1 < speeches.Count && (regex.Replace(line, "").Contains(regex.Replace(speeches[s + 1].Name, "")) && speechStart)) || i + 1 == frames.Count)
+                if ((regex.Replace(lines, "").Contains(regex.Replace(speeches[s].Name, "")) && !speechStart) || (s + 1 < speeches.Count && (regex.Replace(lines, "").Contains(regex.Replace(speeches[s + 1].Name, "")) && speechStart)) || (i + 1 == frames.Count && speechStart))
+                {
+                    currSpeech = speeches[s];
+                    speechStartTime = frames[i].StartTime;
+                    if (speechStart)
                     {
-                        currSpeech = speeches[s];
-                        speechStartTime = frames[i].StartTime;
-                        if (speechStart)
-                        {
-                            speechesWithText.Add(new SpeechWithText(currSpeech.Name, text));
-                            text = "";
-                            speechStop = true;
-                            speechStart = false;
-                            break;
-                        }
-                        speechStart = true;
-                        break;
+                        speechesWithText.Add(new SpeechWithText(currSpeech.Name, text));
+                        text = "";
+                        speechStop = true;
+                        speechStart = false;
                     }
-                    else if (speechStart)
-                    {
-                        text += " " + line;
-                    }
+                    speechStart = true;
+                }
+                else if (speechStart)
+                {
+                    text += tegregex.Replace(lines, "") + " ";
                 }
                 if (speechStop)
                 {
